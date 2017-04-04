@@ -1,0 +1,8 @@
+//Elizabeth Parent
+
+Artist’s Statement
+
+The goal of my project is to create a 3D version of the Adirondack mountains in New York, specifically the High Peaks region. I will achieve this using a heightmap jpg from sarTOPO.com which will be a bird’s eye view with higher elevations being whiter and lower being blacker. I will then place a mesh over it, use P3D, and raise the z-values depending on the shade of the image. This map, complete with trails, their difficulty, and weather conditions, will serve as a tool for hikers when planning their trip. I will pull the weather conditions from the internet and display them, with corresponding graphics, in the upper right corner.
+My model will be like a floating island that the user can zoom in on and rotate around the center. I will have two colour schemes; one for summer and one for winter. The winter version will have snow falling and skiers on certain slopes while the summer version will show more nature and brighter greens. I will also include locations of lean-to’s and cabins so that the user can know where it is possible to camp. I intend to make the range very aesthetically pleasing and fun to use. 
+There are 46 peaks in the range that are above 4000ft in elevation. It is a common goal for hikers to summit all 46, so I will implement a system where they can check off those peaks they have reached. They can then figure out the best trails to complete the ones which they are missing. 
+My program would help users to visualize their hike beforehand. Often, it is difficult to do this using a regular flat map and there can be surprise steep sections. My map will allow people to get a realistic picture of what they are about to attempt.
