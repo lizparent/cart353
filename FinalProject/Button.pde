@@ -28,16 +28,16 @@ class Button
     fill(0);
     text(label, x + 5, y + (height - fontSize) / 2 + (height / 2));
     
-    if(framesPassed < delay)
-    {
-      framesPassed++;
-    }
+    //if(framesPassed < delay)
+    //{
+    //  framesPassed++;
+    //}
   }
   
-  public void SetFrameDelay(int delay)
-  {
-    this.delay = delay;
-  }
+  //public void SetFrameDelay(int delay)
+  //{
+  //  this.delay = delay;
+  //}
   
   public boolean IsPressed()
   {    
@@ -50,11 +50,7 @@ class Button
     {
       if(mouseY >= y && mouseY <= y + (height))
       {
-        if(framesPassed == delay)
-        {
-          framesPassed = 0;
-          return true;
-        }
+        return true;
       }
     }
     
