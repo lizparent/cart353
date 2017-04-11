@@ -10,14 +10,15 @@ int h = 800;
 //boolean for day and night
 boolean day = true;
 
+//boolean for trail
+boolean rTrail = false;
+
+//boolean for leanto's
+boolean bLeanto = false;
+
 //image of the map and trails
 PImage img;
 PImage img2;
-
-//number of stars
-int numPulses = 500;
-//an array of pulse objects/instances
-Pulse[] pulseArray = new Pulse[numPulses];
 
 //instantiating buttons
 Button buttonSummer;
@@ -25,9 +26,13 @@ Button buttonWinter;
 Button buttonTrailsOn;
 Button buttonTrailsOff;
 
+//trees
+Tree[][] treeArray = new Tree[500][500];
+
 //terrain array
 float[][] terrain;
 float[][] trails;
+float[][] leantos;
 
 //minor color changes for each cell
 int[][] alphaTerrain;
@@ -38,24 +43,21 @@ PeasyCam cam;
 
 void setup() {
   size(1200, 800, P3D);
-  //traversing the pulseArray, creating a new Pulse instance at each element, using random location
-  for (int i = 0; i < numPulses; i++) {
-    //Pulse(int newX, int newY);
-    pulseArray[i] = new Pulse(int(random(width)), int(random(height)));
-  }
-  buttonSummer = new Button(250, 15, 75, 25, "Summer", 14);
-  buttonWinter = new Button(340, 15, 75, 25, "Winter", 14);
+
+  buttonSummer = new Button(250, 15, 75, 25, "Trails", 16);
+  buttonWinter = new Button(370, 15, 75, 25, "Lean-to's", 16);
 
   img = loadImage("map.jpg");
   img2 = loadImage("trail2.jpg");
 
   cam = new PeasyCam(this, 800);
   cam.setMinimumDistance(500);
-  cam.setMaximumDistance(1200);
+  cam.setMaximumDistance(1000);
   cols = w/scl;
   rows = h/scl;
   terrain = new float[cols][rows];
   trails = new float[cols][rows];
+  leantos = new float[cols][rows];
 
   alphaTerrain = new int[cols][rows];
   for (int x = 0; x< cols; x++) {
@@ -71,19 +73,21 @@ void draw() {
   cam.setActive(false);  // false to make this camera stop responding to mouse
   pushMatrix();
   translate(0, -200, 0);
+  
+  rectMode(CORNER);
   buttonSummer.Draw();
   buttonWinter.Draw();
+  
+  rectMode(CENTER);
+  fill(255, 100, 0);
+  ellipse(235, 28, 6, 6);
+  fill(0);
+  rect(355, 28, 6, 6);
+  
   popMatrix();
   cam.setActive(true);  // false to make this camera stop responding to mouse
   cam.setYawRotationMode();   // like spinning a globe
   cam.lookAt(mouseX, mouseY, 0);
-  //if (buttonDay.IsPressed() == true) {
-  //  background(200, 230, 255);
-  //}
-  //draw the stars
-  for (int i = 0; i < numPulses; i++) {
-    pulseArray[i].drawPulse();
-  }
 
   //load pixels but do not display the image
   //image(img, 0, 0);
@@ -113,14 +117,17 @@ void draw() {
       float Bpixel = blue(pixelColor);
       if (Rpixel <= 255 && Rpixel > 180 && Gpixel < 30 && Bpixel < 30) {
         trails[x][y] = terrain[x][y]+1;
+        rTrail = true;
+      }
+      if (Rpixel > 250 && Gpixel > 250 && Bpixel < 5) {
+        leantos[x][y] = terrain[x][y]+1;
+        bLeanto = true;
       }
     }
   }
 
-  //translate(width/2, height/4+50);
   //rotate and translate for a better view
   rotateX(PI/4);
-  //translate(-w/2, -h/4);
   //drawing strips of triangles as the mesh
   //mesh from Daniel Shiffman
   for (int y = 0; y < rows-1; y++) {
@@ -140,7 +147,6 @@ void draw() {
         color e = lerpColor(a, b, inter);
         inter += 0.08;
         //random change to colors to see triangles
-        //int randomCol = int (random(-20, 20));
         fill(e, 200+alphaTerrain[x][y]);
       }
       if (terrain[x][y]*3 > 250) {
@@ -157,18 +163,33 @@ void draw() {
       }
       vertex(x*scl, y*scl, terrain[x][y]);
       vertex(x*scl, (y+1)*scl, terrain[x][y+1]);
-      //float eColor = terrain[x][y]*3;
-      //fill(eColor, eColor, eColor);
     }
     endShape();
   }
   for (int x = 0; x < cols; x++) {
     for (int y = 0; y < rows; y++) {
-      fill(255, 0, 0);
-      pushMatrix();
-      translate(x*scl, y*scl, trails[x][y]);
-      ellipse(0, 0, 2.5, 2.5);
-      popMatrix();
+      if (rTrail == true && trails[x][y] > 2) {
+        fill(255, 100, 0);
+        pushMatrix();
+        translate(x*scl, y*scl, trails[x][y]);
+        ellipse(0, 0, 2.5, 2.5);
+        popMatrix();
+      }
+      if (bLeanto == true && leantos[x][y] > 2) {
+        fill(0);
+        pushMatrix();
+        translate(x*scl, y*scl, leantos[x][y]);
+        rect(0, 0, 3, 3);
+        popMatrix();
+      }
+      //tree array
+      //for (int i = 0; i < cols; i++) {
+      //  for (int j = 0; j < rows; j++) {
+      //    if (terrain[x][y] > 2) {
+      //      treeArray[cols][rows] = new Tree(0, 0);
+      //    }
+      //  }
+      //}
     }
   }
 }
